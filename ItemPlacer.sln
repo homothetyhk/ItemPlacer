@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30104.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItemPlacer", "ItemPlacer\ItemPlacer.csproj", "{83362F52-99DF-419C-9F7C-4131026B31AB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{83362F52-99DF-419C-9F7C-4131026B31AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83362F52-99DF-419C-9F7C-4131026B31AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83362F52-99DF-419C-9F7C-4131026B31AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83362F52-99DF-419C-9F7C-4131026B31AB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8FED1A5D-4D29-4E37-B50C-FFEAAA8286C4}
+	EndGlobalSection
+EndGlobal
