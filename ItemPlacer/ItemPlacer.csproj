@@ -49,6 +49,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SpecialActions.cs" />
+    <Compile Include="LanguageEntry.cs" />
     <Compile Include="XmlManager.cs" />
     <Compile Include="ILP.cs" />
     <Compile Include="ItemPlacer.cs">
