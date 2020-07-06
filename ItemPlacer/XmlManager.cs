@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -145,7 +146,10 @@ namespace ItemPlacer
                     if (doc.SelectSingleNode("randomizer/" + field.Name) is XmlNode node)
                     {
                         if (field.FieldType == typeof(bool)) field.SetValue(settings, bool.Parse(node.InnerText));
-                        else if (field.FieldType == typeof(string)) field.SetValue(settings, node.InnerText);
+                        else if (field.FieldType == typeof(HashSet<string>))
+                        {
+                            field.SetValue(settings, new HashSet<string>(node.SelectNodes("sceneName").Cast<XmlNode>().Select(_node => _node.InnerText)));
+                        }
                     }
                 }
             }
@@ -383,10 +387,21 @@ namespace ItemPlacer
                 }
                 foreach (FieldInfo field in typeof(ItemChangerSettings).GetFields(BindingFlags.Instance | BindingFlags.Public))
                 {
-                    if (field.FieldType != typeof(bool)) continue;
-                    xw.WriteStartElement(field.Name);
-                    xw.WriteString(field.GetValue(settings).ToString());
-                    xw.WriteEndElement();
+                    if (field.FieldType == typeof(bool))
+                    {
+                        xw.WriteStartElement(field.Name);
+                        xw.WriteString(field.GetValue(settings).ToString());
+                        xw.WriteEndElement();
+                    }
+                    else if (field.FieldType == typeof(HashSet<string>))
+                    {
+                        xw.WriteStartElement(field.Name);
+                        foreach (string element in (HashSet<string>)field.GetValue(settings))
+                        {
+                            xw.WriteElementString("sceneName", element);
+                        }
+                        xw.WriteEndElement();
+                    }
                 }
                 if (changeStart)
                 {
@@ -633,6 +648,35 @@ namespace ItemPlacer
             }
         }
 
+        public static Dictionary<string, Location> Locations;
+        public static void FetchLocationDefs(Stream locationStream)
+        {
+            XmlDocument locations = new XmlDocument();
+            locations.Load(locationStream);
+            locationStream.Dispose();
+
+            Locations = new Dictionary<string, Location>();
+            foreach (XmlNode node in locations.SelectNodes("randomizer/item"))
+            {
+                Location loc = ProcessXmlNodeAsLocation(node);
+                Locations[loc.name] = loc;
+            }
+        }
+
+
+        public static HashSet<string> platformScenes;
+        private static XmlDocument platforms;
+        public static void FetchPlatformScenes(Stream platformStream)
+        {
+            platforms = new XmlDocument();
+            platforms.Load(platformStream);
+            platformStream.Dispose();
+
+            platformScenes = new HashSet<string>();
+            foreach (XmlNode node in platforms.SelectNodes("randomizer/plat")) platformScenes.Add(node["sceneName"].InnerText);
+
+        }
+
         static Dictionary<string, FieldInfo> itemFields;
         public static Item ProcessXmlNodeAsItem(XmlNode node)
         {
@@ -709,6 +753,17 @@ namespace ItemPlacer
                         
                     }
                 }
+                else if (field.FieldType == typeof(Item.ItemPool))
+                {
+                    if (Enum.TryParse(fieldNode.InnerText, out Item.ItemPool type))
+                    {
+                        field.SetValue(item, type);
+                    }
+                    else
+                    {
+                        
+                    }
+                }
                 else if (field.FieldType == typeof(int))
                 {
                     if (int.TryParse(fieldNode.InnerText, out int xmlInt))
@@ -742,5 +797,125 @@ namespace ItemPlacer
             return (Item)item;
         }
 
+        static Dictionary<string, FieldInfo> locFields;
+        public static Location ProcessXmlNodeAsLocation(XmlNode node)
+        {
+            if (locFields == null)
+            {
+                locFields = new Dictionary<string, FieldInfo>();
+                typeof(Location).GetFields().ToList().ForEach(f => locFields.Add(f.Name, f));
+            }
+
+            XmlAttribute nameAttr = node.Attributes?["name"];
+            if (nameAttr == null)
+            {
+                return new Location();
+            }
+
+            // Setting as object prevents boxing in FieldInfo.SetValue calls
+            object location = new Location();
+            locFields["name"].SetValue(location, nameAttr.InnerText);
+
+            foreach (XmlNode fieldNode in node.ChildNodes)
+            {
+                if (!locFields.TryGetValue(fieldNode.Name, out FieldInfo field))
+                {
+                    continue;
+                }
+
+                if (field.FieldType == typeof(string))
+                {
+                    field.SetValue(location, fieldNode.InnerText);
+                }
+                else if (field.FieldType == typeof(string[]))
+                {
+                    field.SetValue(location, fieldNode.InnerText.Split(','));
+                }
+                else if (field.FieldType == typeof(bool))
+                {
+                    if (bool.TryParse(fieldNode.InnerText, out bool xmlBool))
+                    {
+                        field.SetValue(location, xmlBool);
+                    }
+                    else
+                    {
+                        
+                    }
+                }
+                else if (field.FieldType == typeof(Location.CostType))
+                {
+                    if (Enum.TryParse(fieldNode.InnerText, out Location.CostType type))
+                    {
+                        field.SetValue(location, type);
+                    }
+                    else
+                    {
+                        
+                    }
+                }
+                else if (field.FieldType == typeof(Location.SpecialFSMEdit))
+                {
+                    if (Enum.TryParse(fieldNode.InnerText, out Location.SpecialFSMEdit type))
+                    {
+                        field.SetValue(location, type);
+                    }
+                    else
+                    {
+                        
+                    }
+                }
+                else if (field.FieldType == typeof(Location.SpecialPDHook))
+                {
+                    if (Enum.TryParse(fieldNode.InnerText, out Location.SpecialPDHook type))
+                    {
+                        field.SetValue(location, type);
+                    }
+                    else
+                    {
+                        
+                    }
+                }
+                else if (field.FieldType == typeof(Location.LocationPool))
+                {
+                    if (Enum.TryParse(fieldNode.InnerText, out Location.LocationPool type))
+                    {
+                        field.SetValue(location, type);
+                    }
+                    else
+                    {
+                        
+                    }
+                }
+                else if (field.FieldType == typeof(int))
+                {
+                    if (int.TryParse(fieldNode.InnerText, out int xmlInt))
+                    {
+                        field.SetValue(location, xmlInt);
+                    }
+                    else
+                    {
+                        
+                    }
+                }
+                else if (field.FieldType == typeof(float))
+                {
+                    if (float.TryParse(fieldNode.InnerText, out float xmlFloat))
+                    {
+                        field.SetValue(location, xmlFloat);
+                    }
+                    else
+                    {
+                        
+                    }
+                }
+                else
+                {
+                    
+                }
+            }
+
+            
+            return (Location)location;
+        }
     }
 }

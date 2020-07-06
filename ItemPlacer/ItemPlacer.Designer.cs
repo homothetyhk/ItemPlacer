@@ -40,6 +40,12 @@
             this.label6 = new System.Windows.Forms.Label();
             this.discardItemBox = new System.Windows.Forms.ListBox();
             this.Settings = new System.Windows.Forms.TabPage();
+            this.checkedListBoxExtraPlatformScenes = new System.Windows.Forms.CheckedListBox();
+            this.label38 = new System.Windows.Forms.Label();
+            this.checkBoxBlockZoteDeath = new System.Windows.Forms.CheckBox();
+            this.checkBoxFixVoidHeart = new System.Windows.Forms.CheckBox();
+            this.checkBoxMoveSeerLeft = new System.Windows.Forms.CheckBox();
+            this.checkBoxMiscSkipFixes = new System.Windows.Forms.CheckBox();
             this.checkBoxTransitionQOL = new System.Windows.Forms.CheckBox();
             this.startWithoutFocus = new System.Windows.Forms.CheckBox();
             this.reduceBaldurHP = new System.Windows.Forms.CheckBox();
@@ -63,6 +69,7 @@
             this.startSceneNameBox = new System.Windows.Forms.TextBox();
             this.changeStartCheckBox = new System.Windows.Forms.CheckBox();
             this.Placements = new System.Windows.Forms.TabPage();
+            this.checkBoxEditCosts = new System.Windows.Forms.CheckBox();
             this.buttonHelp = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.comboBoxCostType = new System.Windows.Forms.ComboBox();
@@ -199,7 +206,8 @@
             this.buttonAddDefaultGameObject = new System.Windows.Forms.Button();
             this.comboBoxDefaultGameObjects = new System.Windows.Forms.ComboBox();
             this.listBoxSpecialActions = new System.Windows.Forms.ListBox();
-            this.checkBoxEditCosts = new System.Windows.Forms.CheckBox();
+            this.checkedListBoxDiscardItemPools = new System.Windows.Forms.CheckedListBox();
+            this.checkedListBoxDiscardLocationPools = new System.Windows.Forms.CheckedListBox();
             this.DiscardBin.SuspendLayout();
             this.Settings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownStartY)).BeginInit();
@@ -333,6 +341,12 @@
             // 
             // Settings
             // 
+            this.Settings.Controls.Add(this.checkedListBoxExtraPlatformScenes);
+            this.Settings.Controls.Add(this.label38);
+            this.Settings.Controls.Add(this.checkBoxBlockZoteDeath);
+            this.Settings.Controls.Add(this.checkBoxFixVoidHeart);
+            this.Settings.Controls.Add(this.checkBoxMoveSeerLeft);
+            this.Settings.Controls.Add(this.checkBoxMiscSkipFixes);
             this.Settings.Controls.Add(this.checkBoxTransitionQOL);
             this.Settings.Controls.Add(this.startWithoutFocus);
             this.Settings.Controls.Add(this.reduceBaldurHP);
@@ -362,6 +376,73 @@
             this.Settings.TabIndex = 1;
             this.Settings.Text = "Settings";
             this.Settings.UseVisualStyleBackColor = true;
+            // 
+            // checkedListBoxExtraPlatformScenes
+            // 
+            this.checkedListBoxExtraPlatformScenes.CheckOnClick = true;
+            this.checkedListBoxExtraPlatformScenes.FormattingEnabled = true;
+            this.checkedListBoxExtraPlatformScenes.Location = new System.Drawing.Point(4, 171);
+            this.checkedListBoxExtraPlatformScenes.Name = "checkedListBoxExtraPlatformScenes";
+            this.checkedListBoxExtraPlatformScenes.Size = new System.Drawing.Size(198, 259);
+            this.checkedListBoxExtraPlatformScenes.TabIndex = 30;
+            // 
+            // label38
+            // 
+            this.label38.AutoSize = true;
+            this.label38.Location = new System.Drawing.Point(3, 154);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(77, 13);
+            this.label38.TabIndex = 29;
+            this.label38.Text = "Extra Platforms";
+            // 
+            // checkBoxBlockZoteDeath
+            // 
+            this.checkBoxBlockZoteDeath.AutoSize = true;
+            this.checkBoxBlockZoteDeath.Checked = true;
+            this.checkBoxBlockZoteDeath.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxBlockZoteDeath.Location = new System.Drawing.Point(339, 336);
+            this.checkBoxBlockZoteDeath.Name = "checkBoxBlockZoteDeath";
+            this.checkBoxBlockZoteDeath.Size = new System.Drawing.Size(141, 17);
+            this.checkBoxBlockZoteDeath.TabIndex = 28;
+            this.checkBoxBlockZoteDeath.Text = "Block Zote Death Event";
+            this.checkBoxBlockZoteDeath.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxFixVoidHeart
+            // 
+            this.checkBoxFixVoidHeart.AutoSize = true;
+            this.checkBoxFixVoidHeart.Checked = true;
+            this.checkBoxFixVoidHeart.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxFixVoidHeart.Location = new System.Drawing.Point(339, 313);
+            this.checkBoxFixVoidHeart.Name = "checkBoxFixVoidHeart";
+            this.checkBoxFixVoidHeart.Size = new System.Drawing.Size(202, 17);
+            this.checkBoxFixVoidHeart.TabIndex = 27;
+            this.checkBoxFixVoidHeart.Text = "Fix Void Heart (hostile shade/siblings)";
+            this.checkBoxFixVoidHeart.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxMoveSeerLeft
+            // 
+            this.checkBoxMoveSeerLeft.AutoSize = true;
+            this.checkBoxMoveSeerLeft.Checked = true;
+            this.checkBoxMoveSeerLeft.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxMoveSeerLeft.Location = new System.Drawing.Point(339, 290);
+            this.checkBoxMoveSeerLeft.Name = "checkBoxMoveSeerLeft";
+            this.checkBoxMoveSeerLeft.Size = new System.Drawing.Size(202, 17);
+            this.checkBoxMoveSeerLeft.TabIndex = 26;
+            this.checkBoxMoveSeerLeft.Text = "Move Seer Left (make room for items)";
+            this.checkBoxMoveSeerLeft.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxMiscSkipFixes
+            // 
+            this.checkBoxMiscSkipFixes.AutoSize = true;
+            this.checkBoxMiscSkipFixes.Checked = true;
+            this.checkBoxMiscSkipFixes.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxMiscSkipFixes.Location = new System.Drawing.Point(339, 267);
+            this.checkBoxMiscSkipFixes.Name = "checkBoxMiscSkipFixes";
+            this.checkBoxMiscSkipFixes.Size = new System.Drawing.Size(471, 17);
+            this.checkBoxMiscSkipFixes.TabIndex = 25;
+            this.checkBoxMiscSkipFixes.Text = "Misc Skip Fixes (Left City lamp, Right City plat, DDark spike, Cliffs shade skip," +
+    " ToL jar respawn)";
+            this.checkBoxMiscSkipFixes.UseVisualStyleBackColor = true;
             // 
             // checkBoxTransitionQOL
             // 
@@ -627,6 +708,8 @@
             // 
             // Placements
             // 
+            this.Placements.Controls.Add(this.checkedListBoxDiscardLocationPools);
+            this.Placements.Controls.Add(this.checkedListBoxDiscardItemPools);
             this.Placements.Controls.Add(this.checkBoxEditCosts);
             this.Placements.Controls.Add(this.buttonHelp);
             this.Placements.Controls.Add(this.label7);
@@ -661,6 +744,17 @@
             this.Placements.TabIndex = 0;
             this.Placements.Text = "Placements";
             this.Placements.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxEditCosts
+            // 
+            this.checkBoxEditCosts.AutoSize = true;
+            this.checkBoxEditCosts.Location = new System.Drawing.Point(276, 73);
+            this.checkBoxEditCosts.Name = "checkBoxEditCosts";
+            this.checkBoxEditCosts.Size = new System.Drawing.Size(68, 17);
+            this.checkBoxEditCosts.TabIndex = 26;
+            this.checkBoxEditCosts.Text = "Edit Cost";
+            this.checkBoxEditCosts.UseVisualStyleBackColor = true;
+            this.checkBoxEditCosts.CheckedChanged += new System.EventHandler(this.checkBoxEditCosts_CheckedChanged);
             // 
             // buttonHelp
             // 
@@ -2062,16 +2156,27 @@
             this.listBoxSpecialActions.Size = new System.Drawing.Size(244, 456);
             this.listBoxSpecialActions.TabIndex = 0;
             // 
-            // checkBoxEditCosts
+            // checkedListBoxDiscardItemPools
             // 
-            this.checkBoxEditCosts.AutoSize = true;
-            this.checkBoxEditCosts.Location = new System.Drawing.Point(276, 73);
-            this.checkBoxEditCosts.Name = "checkBoxEditCosts";
-            this.checkBoxEditCosts.Size = new System.Drawing.Size(68, 17);
-            this.checkBoxEditCosts.TabIndex = 26;
-            this.checkBoxEditCosts.Text = "Edit Cost";
-            this.checkBoxEditCosts.UseVisualStyleBackColor = true;
-            this.checkBoxEditCosts.CheckedChanged += new System.EventHandler(this.checkBoxEditCosts_CheckedChanged);
+            this.checkedListBoxDiscardItemPools.CheckOnClick = true;
+            this.checkedListBoxDiscardItemPools.FormattingEnabled = true;
+            this.checkedListBoxDiscardItemPools.HorizontalScrollbar = true;
+            this.checkedListBoxDiscardItemPools.Location = new System.Drawing.Point(348, 127);
+            this.checkedListBoxDiscardItemPools.Name = "checkedListBoxDiscardItemPools";
+            this.checkedListBoxDiscardItemPools.Size = new System.Drawing.Size(75, 184);
+            this.checkedListBoxDiscardItemPools.TabIndex = 27;
+            this.checkedListBoxDiscardItemPools.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBoxDiscardItemPools_ItemCheck);
+            // 
+            // checkedListBoxDiscardLocationPools
+            // 
+            this.checkedListBoxDiscardLocationPools.CheckOnClick = true;
+            this.checkedListBoxDiscardLocationPools.FormattingEnabled = true;
+            this.checkedListBoxDiscardLocationPools.HorizontalScrollbar = true;
+            this.checkedListBoxDiscardLocationPools.Location = new System.Drawing.Point(429, 127);
+            this.checkedListBoxDiscardLocationPools.Name = "checkedListBoxDiscardLocationPools";
+            this.checkedListBoxDiscardLocationPools.Size = new System.Drawing.Size(75, 184);
+            this.checkedListBoxDiscardLocationPools.TabIndex = 28;
+            this.checkedListBoxDiscardLocationPools.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBoxDiscardLocationPools_ItemCheck);
             // 
             // ItemPlacer
             // 
@@ -2293,6 +2398,14 @@
         private System.Windows.Forms.Label label35;
         private System.Windows.Forms.CheckBox checkBoxTransitionQOL;
         private System.Windows.Forms.CheckBox checkBoxEditCosts;
+        private System.Windows.Forms.CheckedListBox checkedListBoxExtraPlatformScenes;
+        private System.Windows.Forms.Label label38;
+        private System.Windows.Forms.CheckBox checkBoxBlockZoteDeath;
+        private System.Windows.Forms.CheckBox checkBoxFixVoidHeart;
+        private System.Windows.Forms.CheckBox checkBoxMoveSeerLeft;
+        private System.Windows.Forms.CheckBox checkBoxMiscSkipFixes;
+        private System.Windows.Forms.CheckedListBox checkedListBoxDiscardLocationPools;
+        private System.Windows.Forms.CheckedListBox checkedListBoxDiscardItemPools;
     }
 }
 

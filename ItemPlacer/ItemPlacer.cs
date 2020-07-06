@@ -51,8 +51,9 @@ namespace ItemPlacer
             
             Type type = typeof(ItemChanger.Item);
             Assembly a = System.Reflection.Assembly.GetAssembly(type);
-            Stream itemStream = a.GetManifestResourceStream("ItemChanger.Resources.items.xml");
-            XmlManager.FetchItemDefs(itemStream);
+            XmlManager.FetchItemDefs(a.GetManifestResourceStream("ItemChanger.Resources.items.xml"));
+            XmlManager.FetchLocationDefs(a.GetManifestResourceStream("ItemChanger.Resources.locations.xml"));
+            XmlManager.FetchPlatformScenes(a.GetManifestResourceStream("ItemChanger.Resources.platforms.xml"));
             fullItemArray = typeof(ItemNames).GetFields().Where(field => field.FieldType == typeof(string)).Select(field => (string)field.GetRawConstantValue()).ToArray();
             fullLocationArray = typeof(LocationNames).GetFields().Where(field => field.FieldType == typeof(string)).Select(field => (string)field.GetRawConstantValue()).ToArray();
             defaultShopPresets = typeof(Shops).GetFields().Where(field => field.FieldType == typeof(Shops.DefaultShopItems) && field.IsLiteral && !field.IsInitOnly).ToArray();
@@ -69,6 +70,17 @@ namespace ItemPlacer
             comboBoxCostType.SelectedIndex = 0;
             checkBoxEditCosts_CheckedChanged(null, null);
 
+            checkedListBoxDiscardItemPools.Items.AddRange(((IEnumerable<Item.ItemPool>)Enum.GetValues(typeof(Item.ItemPool))).Intersect(XmlManager.Items.Select(item => item.Value.pool)).Select(pool => (object)pool).ToArray());
+            for (int i = 0; i < checkedListBoxDiscardItemPools.Items.Count; i++)
+            {
+                checkedListBoxDiscardItemPools.SetItemChecked(i, true);
+            }
+
+            checkedListBoxDiscardLocationPools.Items.AddRange(((IEnumerable<Location.LocationPool>)Enum.GetValues(typeof(Location.LocationPool))).Intersect(XmlManager.Locations.Select(item => item.Value.pool)).Select(pool => (object)pool).ToArray());
+            for (int i = 0; i < checkedListBoxDiscardLocationPools.Items.Count; i++)
+            {
+                checkedListBoxDiscardLocationPools.SetItemChecked(i, true);
+            }
 
             comboBoxDefaultShopItems.Items.AddRange(defaultShopPresets                
                 .Select(field => field.Name).ToArray());
@@ -92,6 +104,12 @@ namespace ItemPlacer
             comboBoxDescTwoCust.Items.AddRange((new HashSet<string>(XmlManager.Items.Values.Select(i => i.descTwoKey))).Where(s => !string.IsNullOrEmpty(s)).ToArray());
 
             comboBoxDefaultGameObjects.Items.AddRange(DefaultGameObjectInfo.defaultObjects.Keys.ToArray());
+
+            checkedListBoxExtraPlatformScenes.Items.AddRange(XmlManager.platformScenes.ToArray());
+            for (int i=0; i < checkedListBoxExtraPlatformScenes.Items.Count; i++)
+            {
+                checkedListBoxExtraPlatformScenes.SetItemChecked(i, true);
+            }
 
             UpdateMultiItemLabel();
         }
@@ -339,6 +357,15 @@ namespace ItemPlacer
                     blockLegEaterDeath.Checked = XmlManager.settings.blockLegEaterDeath;
                     oneBlueHPLifebloodCoreDoor.Checked = XmlManager.settings.oneBlueHPLifebloodCoreDoor;
                     reduceBaldurHP.Checked = XmlManager.settings.reduceBaldurHP;
+                    checkBoxTransitionQOL.Checked = XmlManager.settings.transitionQOL;
+                    checkBoxMiscSkipFixes.Checked = XmlManager.settings.miscSkipFixes;
+                    checkBoxMoveSeerLeft.Checked = XmlManager.settings.moveSeerLeft;
+                    checkBoxFixVoidHeart.Checked = XmlManager.settings.fixVoidHeart;
+                    checkBoxBlockZoteDeath.Checked = XmlManager.settings.blockZoteDeath;
+                    foreach (string sceneName in XmlManager.settings.skipExtraPlatformScenes ?? new HashSet<string>())
+                    {
+                        checkedListBoxExtraPlatformScenes.SetItemChecked(checkedListBoxExtraPlatformScenes.Items.IndexOf(sceneName), false);
+                    }
 
                     startWithoutFocus.Checked = XmlManager.settings.startWithoutFocus;
 
@@ -365,6 +392,12 @@ namespace ItemPlacer
                     blockLegEaterDeath = blockLegEaterDeath.Checked,
                     oneBlueHPLifebloodCoreDoor = oneBlueHPLifebloodCoreDoor.Checked,
                     reduceBaldurHP = reduceBaldurHP.Checked,
+                    transitionQOL = checkBoxTransitionQOL.Checked,
+                    miscSkipFixes = checkBoxMiscSkipFixes.Checked,
+                    moveSeerLeft = checkBoxMoveSeerLeft.Checked,
+                    fixVoidHeart = checkBoxFixVoidHeart.Checked,
+                    blockZoteDeath = checkBoxBlockZoteDeath.Checked,
+
 
                     startWithoutFocus = startWithoutFocus.Checked,
 
@@ -372,8 +405,16 @@ namespace ItemPlacer
                     colo1ItemPrompt = colo1Prompt.Checked,
                     colo2ItemPrompt = colo2Prompt.Checked,
                     flowerQuestPrompt = flowerQuestPrompt.Checked,
-                    whitePalacePrompt = whitePalacePrompt.Checked
+                    whitePalacePrompt = whitePalacePrompt.Checked,
+
+                    skipExtraPlatformScenes = new HashSet<string>
+                    (
+                    from string item in checkedListBoxExtraPlatformScenes.Items
+                    where !checkedListBoxExtraPlatformScenes.CheckedItems.Contains(item)
+                    select item
+                    ),
                 };
+
                 StartLocation startLocation = new StartLocation
                 {
                     startSceneName = startSceneNameBox.Text,
@@ -951,6 +992,13 @@ namespace ItemPlacer
                         return;
                     }
                     break;
+                case "Spike":
+                    if (!float.TryParse(paramOne, out _))
+                    {
+                        MessageBox.Show("Parameter one must be a floating point number.", "Error");
+                        return;
+                    }
+                    break;
             }
             switch (name)
             {
@@ -1026,6 +1074,61 @@ namespace ItemPlacer
                 costUpDown.Value = 0;
                 costUpDown.Enabled = false;
                 comboBoxCostType.Enabled = false;
+            }
+        }
+
+        private void checkedListBoxDiscardItemPools_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            Item.ItemPool pool = (Item.ItemPool)checkedListBoxDiscardItemPools.Items[e.Index];
+            if (e.NewValue == CheckState.Checked)
+            {
+                foreach (Item item in XmlManager.Items.Values.Where(i => i.pool == pool))
+                {
+                    if (discardItemBox.Items.Contains(item.name))
+                    {
+                        discardItemBox.Items.Remove(item.name);
+                        comboBoxItems.Items.Add(item.name);
+                    }
+                }
+            }
+            else
+            {
+                foreach (Item item in XmlManager.Items.Values.Where(i => i.pool == pool))
+                {
+                    if (comboBoxItems.Items.Contains(item.name))
+                    {
+                        discardItemBox.Items.Add(item.name);
+                        comboBoxItems.Items.Remove(item.name);
+                    }
+                }
+            }
+            
+        }
+
+        private void checkedListBoxDiscardLocationPools_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            Location.LocationPool pool = (Location.LocationPool)checkedListBoxDiscardLocationPools.Items[e.Index];
+            if (e.NewValue == CheckState.Checked)
+            {
+                foreach (Location loc in XmlManager.Locations.Values.Where(i => i.pool == pool))
+                {
+                    if (discardLocBox.Items.Contains(loc.name))
+                    {
+                        discardLocBox.Items.Remove(loc.name);
+                        comboBoxLocations.Items.Add(loc.name);
+                    }
+                }
+            }
+            else
+            {
+                foreach (Location location in XmlManager.Locations.Values.Where(i => i.pool == pool))
+                {
+                    if (comboBoxLocations.Items.Contains(location.name))
+                    {
+                        discardLocBox.Items.Add(location.name);
+                        comboBoxLocations.Items.Remove(location.name);
+                    }
+                }
             }
         }
     }

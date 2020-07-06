@@ -57,6 +57,14 @@ namespace ItemPlacer
                 paramOneLabel = "Disable if entrygate is: (e.g. bot1, etc)"
             } },
             {"Shadow Gate", new DefaultGameObjectInfo() },
+            {"Sawblade", new DefaultGameObjectInfo() },
+            {"Soul Totem", new DefaultGameObjectInfo() },
+            {"Spike", new DefaultGameObjectInfo
+            {
+                useParamOne = true,
+                paramOneLabel = "Rotate (degrees, ccw, 0=face right)"
+            } },
+
             // too much fsm editing
             //{"Elegant Key Gate", new DefaultGameObjectInfo() },
             //{"Love Key Gate", new DefaultGameObjectInfo() },
